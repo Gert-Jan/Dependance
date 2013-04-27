@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="Default" tilewidth="16" tileheight="16">
+  <image source="../art/LevelTiles.png" width="32" height="16"/>
+ </tileset>
+ <layer name="1" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt2MEJACEQBME1/6TlcjiwlC6YAPo7a2bWI7tdHZY6LHVY6rDUYanDUoelDksdljosdVjqsLzQ8KnDcvpX/nMbNikAmg==
+  </data>
+ </layer>
+ <layer name="0" width="50" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztmEsKwCAMBaP3P3Qv4KeFqhOZgWwMCENW75WIKJdMdvRgoQcLPVjowUIPFnqw0IPFSY8/84P3YJHRozbednjMsvTbrD3aZ7xHCz36f53oYbwHiy8e9C7vdo9s3eqqznj3PEPUANI=
+  </data>
+ </layer>
+</map>
