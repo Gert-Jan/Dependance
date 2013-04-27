@@ -31,7 +31,10 @@ package com.ddg.dep
 			t1 = t2;
 			// air for android deltatime can be 0 potentially causing a lot of devision-by-zero misery
 			if (deltaTime < 0.001)
-					deltaTime = 0.001;
+				deltaTime = 0.001;
+			// add a max deltaTime to fix collision extremity
+			if (deltaTime > 0.05)
+				deltaTime = 0.05;
 		}
 	}
 }

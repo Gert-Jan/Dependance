@@ -7,7 +7,7 @@ package com.ddg.dep
 	/**
 	 * @author Gert-Jan Stolk
 	 */
-	public class Assets 
+	public dynamic class Assets 
 	{
 		private static const instance:Assets = new Assets();
 		
@@ -41,19 +41,23 @@ package com.ddg.dep
 		
 		private function CreateTileMap(asset:Class, tileWidth:int, tileHeight:int):TextureAtlas
 		{
-			var texture:Texture = Texture.fromBitmap(new asset());
-			var atlas:TextureAtlas = new TextureAtlas(texture, null);
-			var tileCountX:int = Math.floor(texture.width / tileWidth);
-			var tileCountY:int = Math.floor(texture.height / tileHeight);
-			for (var y:int = 0; y < tileCountY; y++)
+			if (this[asset] == null)
 			{
-				for (var x:int = 0; x < tileCountX; x++)
+				var texture:Texture = Texture.fromBitmap(new asset());
+				var atlas:TextureAtlas = new TextureAtlas(texture, null);
+				var tileCountX:int = Math.floor(texture.width / tileWidth);
+				var tileCountY:int = Math.floor(texture.height / tileHeight);
+				for (var y:int = 0; y < tileCountY; y++)
 				{
-					var rect:Rectangle = new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
-					atlas.addRegion((y * tileCountX + x + 1).toString(), rect);
+					for (var x:int = 0; x < tileCountX; x++)
+					{
+						var rect:Rectangle = new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+						atlas.addRegion((y * tileCountX + x + 1).toString(), rect);
+					}
 				}
+				this[asset] = atlas;
 			}
-			return atlas;
+			return this[asset];
 		}
 		
 		private function CreateJSON(asset:Class):Object

@@ -1,6 +1,7 @@
 package com.ddg.dep.view 
 {
 	import com.ddg.dep.Assets;
+	import com.ddg.dep.game.actor.DudeManager;
 	import com.ddg.dep.game.graphics.Camera;
 	import com.ddg.dep.game.level.LevelManager;
 	import com.ddg.dep.Keys;
@@ -28,6 +29,9 @@ package com.ddg.dep.view
 			LevelManager.Instance.Init();
 			camera = Camera.Instance;
 			surface.addChild(camera.Surface);
+			
+			DudeManager.Instance.Init();
+			surface.addChild(DudeManager.Instance.Surface);
 		}
 		
 		private function InitTest():void
@@ -56,6 +60,7 @@ package com.ddg.dep.view
 		public function Update(deltaTime:Number):void
 		{
 			camera.Update(deltaTime);
+			DudeManager.Instance.Update(deltaTime);
 		}
 		
 		public function get IsActive():Boolean
@@ -70,6 +75,7 @@ package com.ddg.dep.view
 		
 		public function OnKeyDown(event:KeyboardEvent):void
 		{
+			DudeManager.Instance.OnKeyDown(event);
 			/*
 			var currentLevelX:int = Math.floor(camera.X / Settings.Instance.StageWidth);
 			var currentLevelY:int = Math.floor(camera.Y / Settings.Instance.StageHeight);
@@ -93,7 +99,7 @@ package com.ddg.dep.view
 		
 		public function OnKeyUp(event:KeyboardEvent):void
 		{
-			
+			DudeManager.Instance.OnKeyUp(event);
 		}
 	}
 }

@@ -4,6 +4,7 @@ package com.ddg.dep.game.level
 	import com.ddg.dep.game.collision.AABB;
 	import com.ddg.dep.game.collision.Tile;
 	import com.ddg.dep.Settings;
+	import flash.geom.Point;
 	/**
 	 * @author Gert-Jan Stolk
 	 */
@@ -74,16 +75,16 @@ package com.ddg.dep.game.level
 		public function GetOverlappingTiles(query:AABB):Vector.<Tile>
 		{
 			var result:Vector.<Tile> = new Vector.<Tile>();
-			for (var levelY = Math.floor(query.minY / Settings.Instance.StageHeight); levelY <= Math.floor(query.maxY / Settings.Instance.StageHeight); levelY++)
+			for (var levelY:int = Math.floor(query.minY / Settings.Instance.StageHeight); levelY <= Math.floor(query.maxY / Settings.Instance.StageHeight); levelY++)
 			{
-				for (var levelX = Math.floor(query.minX / Settings.Instance.StageWidth); levelX <= Math.floor(query.maxX / Settings.Instance.StageWidth); levelX++)
+				for (var levelX:int = Math.floor(query.minX / Settings.Instance.StageWidth); levelX <= Math.floor(query.maxX / Settings.Instance.StageWidth); levelX++)
 				{
 					var level:Level = GetLevel(levelX, levelY);
 					if (level != null)
 					{
-						for (var tileY = Math.floor((query.minY - level.Y) / Settings.TILE_HEIGHT); tileY <= Math.floor((query.maxY - level.Y) / Settings.TILE_HEIGHT); tileY++)
+						for (var tileY:int = Math.floor((query.minY - level.Y) / Settings.TILE_HEIGHT); tileY <= Math.floor((query.maxY - level.Y) / Settings.TILE_HEIGHT); tileY++)
 						{
-							for (var tileX = Math.floor((query.minX - level.X) / Settings.TILE_WIDTH); tileX <= Math.floor((query.maxX - level.X) / Settings.TILE_WIDTH); tileX++)
+							for (var tileX:int = Math.floor((query.minX - level.X) / Settings.TILE_WIDTH); tileX <= Math.floor((query.maxX - level.X) / Settings.TILE_WIDTH); tileX++)
 							{
 								var tile:Tile = level.GetTile(tileX, tileY);
 								if (tile != null)
@@ -95,6 +96,17 @@ package com.ddg.dep.game.level
 					}
 				}
 			}
+			return result;
+		}
+		
+		public function GetTileOnPoint(point:Point):Tile
+		{
+			var level:Level = GetLevel(Math.floor(point.x / Settings.Instance.StageWidth), Math.floor(point.y / Settings.Instance.StageHeight));
+			if (level != null)
+			{
+				return level.GetTile(Math.floor((point.x - level.X) / Settings.TILE_WIDTH), Math.floor((point.y - level.Y) / Settings.TILE_HEIGHT));
+			}
+			return null;
 		}
 	}
 }

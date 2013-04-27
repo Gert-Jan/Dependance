@@ -36,10 +36,10 @@ package com.ddg.dep.game.level
 			{
 				for (var x:int = 0; x < width; x++)
 				{
-					var tile:int = GetTile(x, y);
-					if (tile > 0)
+					var tile:Tile = GetTile(x, y);
+					if (tile != null)
 					{
-						var image:Image = new Image(tileSheet.getTexture(tile.toString()));
+						var image:Image = new Image(tileSheet.getTexture(tile.type.toString()));
 						image.x = x * Settings.TILE_WIDTH;
 						image.y = y * Settings.TILE_HEIGHT;
 						sprite.addChild(image);
@@ -65,7 +65,7 @@ package com.ddg.dep.game.level
 			if (x >= 0 && x < width &&
 				y >= 0 && y < height &&
 				data[y * width + x] > 0)
-				return new Tile(data[y * width + x], new AABB(this.x + x * Settings.TILE_WIDTH, this.y + y * Settings.TILE_HEIGHT, Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+				return new Tile(data[y * width + x], new AABB(this.x + x * Settings.TILE_WIDTH, this.y + y * Settings.TILE_HEIGHT, Settings.TILE_WIDTH, Settings.TILE_HEIGHT));
 			else
 				return null;
 		}

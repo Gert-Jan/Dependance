@@ -70,7 +70,7 @@ package com.ddg.dep.game.graphics
 			return surface;
 		}
 		
-		public function MoveTo(x:Number, y:Number, time:Number)
+		public function MoveTo(x:Number, y:Number, time:Number):void
 		{
 			targetTime = time;
 			targetPosition.x = x;
@@ -84,9 +84,9 @@ package com.ddg.dep.game.graphics
 			surface.removeChildren();
 			var nw:Point = ViewToWorld(new Point(0, 0));
 			var se:Point = ViewToWorld(new Point(Settings.Instance.StageWidth, Settings.Instance.StageHeight));
-			for (var y = Math.floor(nw.y / Settings.Instance.StageHeight); y <= Math.floor(se.y / Settings.Instance.StageHeight); y++)
+			for (var y:int = Math.floor(nw.y / Settings.Instance.StageHeight); y <= Math.floor(se.y / Settings.Instance.StageHeight); y++)
 			{
-				for (var x = Math.floor(nw.x / Settings.Instance.StageWidth); x <= Math.floor(se.x / Settings.Instance.StageWidth); x++)
+				for (var x:int = Math.floor(nw.x / Settings.Instance.StageWidth); x <= Math.floor(se.x / Settings.Instance.StageWidth); x++)
 				{
 					var level:Level = LevelManager.Instance.GetLevel(x, y);
 					if (level != null)

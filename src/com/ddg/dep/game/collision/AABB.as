@@ -1,5 +1,7 @@
 package com.ddg.dep.game.collision 
 {
+	import com.ddg.dep.util.PointHelper;
+	import flash.geom.Point;
 	/**
 	 * @author Gert-Jan Stolk
 	 */
@@ -24,6 +26,11 @@ package com.ddg.dep.game.collision
 			maxX = x + width;
 			minY = y;
 			maxY = y + height;
+		}
+		
+		public function LocalToWorldPoint(point:Point):Point
+		{
+			return PointHelper.Add(new Point(minX, minY), point);
 		}
 	}
 }
