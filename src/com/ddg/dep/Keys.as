@@ -9,5 +9,6 @@ package com.ddg.dep
 		public static const DOWN:int = 40;
 		public static const LEFT:int = 37;
 		public static const RIGHT:int = 39;
+		public static const SWITCH:int = 32;
 	}
 }

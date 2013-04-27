@@ -1,6 +1,8 @@
 package com.ddg.dep 
 {
+	import com.ddg.dep.audio.AudioSample;
 	import flash.geom.Rectangle;
+	import flash.media.Sound;
 	import flash.utils.ByteArray;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
@@ -25,6 +27,16 @@ package com.ddg.dep
 		private static const dudeNormal:Class;
 		[Embed(source = "../../../../art/DudeSmall.png")]
 		private static const dudeSmall:Class;
+		
+		[Embed(source = "../../../../art/audio/IdleNormal01.mp3")]
+		private static const audioIdleNormal01:Class;
+		[Embed(source = "../../../../art/audio/IdleSmall01.mp3")]
+		private static const audioIdleSmall01:Class;
+		[Embed(source = "../../../../art/audio/WalkNormal01.mp3")]
+		private static const audioWalkNormal01:Class;
+		[Embed(source = "../../../../art/audio/WalkSmall01.mp3")]
+		private static const audioWalkSmall01:Class;
+		
 		[Embed(source = "../../../../art/Levels.json", mimeType="application/octet-stream")]
 		private static const levels:Class;
 		
@@ -60,6 +72,15 @@ package com.ddg.dep
 			return this[asset];
 		}
 		
+		private function CreateAudioSample(asset:Class, bpm:int, beats:int):AudioSample
+		{
+			if (this[asset] == null)
+			{
+				this[asset] = new AudioSample(Sound(new asset()), bpm, beats);
+			}
+			return this[asset];
+		}
+		
 		private function CreateJSON(asset:Class):Object
 		{
 			var bytes:ByteArray = new asset();
@@ -71,5 +92,9 @@ package com.ddg.dep
 		public function get DudeSmall():Texture { return CreateTexture(dudeSmall); }
 		public function get Tiles():TextureAtlas { return CreateTileMap(tiles, Settings.TILE_WIDTH, Settings.TILE_HEIGHT); }
 		public function get Levels():Object { return CreateJSON(levels); }
+		public function get AudioIdleNormal01():AudioSample { return CreateAudioSample(audioIdleNormal01, 140, 8); }
+		public function get AudioIdleSmall01():AudioSample { return CreateAudioSample(audioIdleSmall01, 140, 8); }
+		public function get AudioWalkNormal01():AudioSample { return CreateAudioSample(audioWalkNormal01, 140, 8); }
+		public function get AudioWalkSmall01():AudioSample { return CreateAudioSample(audioWalkSmall01, 140, 8); }
 	}
 }

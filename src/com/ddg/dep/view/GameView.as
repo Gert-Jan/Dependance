@@ -1,6 +1,7 @@
 package com.ddg.dep.view 
 {
 	import com.ddg.dep.Assets;
+	import com.ddg.dep.audio.AudioManager;
 	import com.ddg.dep.game.actor.DudeManager;
 	import com.ddg.dep.game.graphics.Camera;
 	import com.ddg.dep.game.level.LevelManager;
@@ -61,6 +62,7 @@ package com.ddg.dep.view
 		
 		public function Update(deltaTime:Number):void
 		{
+			AudioManager.Instance.Update(deltaTime);
 			camera.Update(deltaTime);
 			DudeManager.Instance.Update(deltaTime);
 		}

@@ -1,5 +1,7 @@
 package com.ddg.dep.game.actor 
 {
+	import com.ddg.dep.audio.AudioLibrary;
+	import com.ddg.dep.audio.AudioSet;
 	import com.ddg.dep.game.actor.behaviour.IBehavior;
 	import com.ddg.dep.game.actor.collisionfilter.ICollisionFilter;
 	import com.ddg.dep.game.collision.AABB;
@@ -9,10 +11,12 @@ package com.ddg.dep.game.actor
 	import com.ddg.dep.game.level.LevelManager;
 	import com.ddg.dep.Keys;
 	import com.ddg.dep.Settings;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.KeyboardEvent;
+	import starling.utils.MatrixUtil;
 	/**
 	 * @author Gert-Jan Stolk
 	 */
@@ -41,9 +45,12 @@ package com.ddg.dep.game.actor
 		// grapics
 		private var sprite:Sprite = new Sprite();
 		
+		// audio
+		private var audioSet:AudioSet;
+		
 		public function Dude(
 			gravityBehavior:IBehavior, upBehavior:IBehavior, downBehavior:IBehavior, leftBehavior:IBehavior, rightBehavior:IBehavior, 
-			bounds:AABB, collision:PointShape, collisionFilter:ICollisionFilter, image:Image) 
+			bounds:AABB, collision:PointShape, collisionFilter:ICollisionFilter, image:Image, audioSet:AudioSet) 
 		{
 			this.gravityBehavior = gravityBehavior;
 			this.gravityBehavior.Actor = this;
@@ -64,6 +71,8 @@ package com.ddg.dep.game.actor
 			
 			sprite.addChild(image);
 			DudeManager.Instance.Surface.addChild(sprite);
+			
+			this.audioSet = audioSet;
 		}
 		
 		public function set Position(value:Point):void
@@ -100,6 +109,13 @@ package com.ddg.dep.game.actor
 				downBehavior.OnActionStopped();
 				leftBehavior.OnActionStopped();
 				rightBehavior.OnActionStopped();
+				audioSet.StopAll();
+			}
+			else
+			{
+				audioSet.PlayLayer(AudioLibrary.ACTION_IDLE);
+				audioSet.PlayLayer(AudioLibrary.ACTION_WALK);
+				audioSet.SetLayerVolume(AudioLibrary.ACTION_WALK, 0);
 			}
 			return isActive;
 		}
@@ -111,6 +127,8 @@ package com.ddg.dep.game.actor
 			UpdateMovement();
 			UpdateLevelCollision();
 			UpdateLevelChange();
+			UpdateBounch(deltaTime);
+			UpdateAudio();
 			Draw();
 		}
 		
@@ -195,9 +213,26 @@ package com.ddg.dep.game.actor
 				LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(level.XIndex, level.YIndex - 1);
 		}
 		
+		private function UpdateBounch(deltaTime:Number):void
+		{
+			//var m:Matrix = new Matrix();
+			//MatrixUtil.prependTranslation(m, sprite.x, sprite.y);
+			//MatrixUtil.prependSkew(m, 0.05, 0);
+			
+			//sprite.transformationMatrix = m;
+		}
+		
+		private function UpdateAudio():void
+		{
+			if (Math.abs(velocity.x) > 0 || Math.abs(velocity.y))
+				audioSet.FadeInLayer(AudioLibrary.ACTION_WALK, 0.2);
+			else
+				audioSet.FadeOutLayer(AudioLibrary.ACTION_WALK,0.01);
+		}
+		
 		private function Draw():void
 		{
-			sprite.x = bounds.minX;
+			sprite.x = bounds.minX + (sprite.width - bounds.width) / 2;
 			sprite.y = bounds.minY;
 		}
 		
