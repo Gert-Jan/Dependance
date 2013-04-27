@@ -3,6 +3,7 @@ package com.ddg.dep.game.level
 	import com.ddg.dep.Assets;
 	import com.ddg.dep.game.collision.AABB;
 	import com.ddg.dep.game.collision.Tile;
+	import com.ddg.dep.game.graphics.Camera;
 	import com.ddg.dep.Settings;
 	import flash.geom.Point;
 	/**
@@ -27,6 +28,7 @@ package com.ddg.dep.game.level
 		]);
 		private var map:Vector.<Vector.<Level>> = null;
 		private var levels:Vector.<Level> = new Vector.<Level>;
+		private var currentLevel:Level = null;
 		
 		public function Init():void
 		{
@@ -70,6 +72,20 @@ package com.ddg.dep.game.level
 				return map[x][y];
 			else
 				return null;
+		}
+		
+		public function get CurrentLevel():Level
+		{
+			return currentLevel;
+		}
+		
+		public function set CurrentLevel(level:Level):void
+		{
+			if (level != null && currentLevel != level)
+			{
+				Camera.Instance.MoveTo(level.X, level.Y, 0.5);
+				currentLevel = level;
+			}
 		}
 		
 		public function GetOverlappingTiles(query:AABB):Vector.<Tile>

@@ -32,6 +32,8 @@ package com.ddg.dep.view
 			
 			DudeManager.Instance.Init();
 			surface.addChild(DudeManager.Instance.Surface);
+			
+			LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(0, 0);
 		}
 		
 		private function InitTest():void

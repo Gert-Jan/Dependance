@@ -1,5 +1,6 @@
 package com.ddg.dep.game.graphics 
 {
+	import com.ddg.dep.game.actor.DudeManager;
 	import com.ddg.dep.game.level.Level;
 	import com.ddg.dep.game.level.LevelManager;
 	import com.ddg.dep.Settings;
@@ -97,6 +98,9 @@ package com.ddg.dep.game.graphics
 			}
 			surface.x = -nw.x;
 			surface.y = -nw.y;
+			var dudeSurface:Sprite = DudeManager.Instance.Surface;
+			dudeSurface.x = -nw.x;
+			dudeSurface.y = -nw.y;
 		}
 		
 		public function Update(deltaTime:Number):void

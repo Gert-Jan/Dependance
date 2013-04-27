@@ -60,12 +60,22 @@ package com.ddg.dep.game.level
 			return y;
 		}
 		
+		public function get XIndex():int
+		{
+			return int(x / Settings.Instance.StageWidth);
+		}
+		
+		public function get YIndex():int
+		{
+			return int(y / Settings.Instance.StageHeight);
+		}
+		
 		public function GetTile(x:int, y:int):Tile
 		{
 			if (x >= 0 && x < width &&
 				y >= 0 && y < height &&
 				data[y * width + x] > 0)
-				return new Tile(data[y * width + x], new AABB(this.x + x * Settings.TILE_WIDTH, this.y + y * Settings.TILE_HEIGHT, Settings.TILE_WIDTH, Settings.TILE_HEIGHT));
+				return new Tile(data[y * width + x], this, new AABB(this.x + x * Settings.TILE_WIDTH, this.y + y * Settings.TILE_HEIGHT, Settings.TILE_WIDTH, Settings.TILE_HEIGHT));
 			else
 				return null;
 		}

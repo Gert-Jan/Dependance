@@ -5,8 +5,10 @@ package com.ddg.dep.game.actor
 	import com.ddg.dep.game.collision.AABB;
 	import com.ddg.dep.game.collision.PointShape;
 	import com.ddg.dep.game.collision.Tile;
+	import com.ddg.dep.game.level.Level;
 	import com.ddg.dep.game.level.LevelManager;
 	import com.ddg.dep.Keys;
+	import com.ddg.dep.Settings;
 	import flash.geom.Point;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -108,6 +110,7 @@ package com.ddg.dep.game.actor
 			UpdateBehaviors(deltaTime);
 			UpdateMovement();
 			UpdateLevelCollision();
+			UpdateLevelChange();
 			Draw();
 		}
 		
@@ -177,6 +180,19 @@ package com.ddg.dep.game.actor
 					velocity.x = Math.min(velocity.x, 0);
 				}
 			}
+		}
+		
+		private function UpdateLevelChange():void
+		{
+			var level:Level = LevelManager.Instance.CurrentLevel;
+			if (velocity.x > 0 && bounds.maxX > level.X + Settings.Instance.StageWidth)
+				LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(level.XIndex + 1, level.YIndex);
+			else if (velocity.x < 0 && bounds.minX < level.X)
+				LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(level.XIndex - 1, level.YIndex);
+			else if (velocity.y > 0 && bounds.maxY > level.Y + Settings.Instance.StageHeight)
+				LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(level.XIndex, level.YIndex + 1);
+			else if (velocity.y < 0 && bounds.minY < level.Y)
+				LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(level.XIndex, level.YIndex - 1);
 		}
 		
 		private function Draw():void

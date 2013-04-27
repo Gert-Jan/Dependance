@@ -1,5 +1,6 @@
 package com.ddg.dep.game.collision 
 {
+	import com.ddg.dep.game.level.Level;
 	/**
 	 * @author Gert-Jan Stolk
 	 */
@@ -10,11 +11,13 @@ package com.ddg.dep.game.collision
 		public static const KEY:int = 2;
 		
 		public var type:int;
+		public var level:Level;
 		public var collision:AABB;
 		
-		public function Tile(type:int, collision:AABB) 
+		public function Tile(type:int, level:Level, collision:AABB) 
 		{
 			this.type = type;
+			this.level = level;
 			this.collision = collision;
 		}
 	}
