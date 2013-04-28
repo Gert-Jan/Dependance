@@ -1,6 +1,7 @@
 package com.ddg.dep.game.level 
 {
 	import com.ddg.dep.Assets;
+	import com.ddg.dep.game.actor.ItemManager;
 	import com.ddg.dep.game.collision.AABB;
 	import com.ddg.dep.game.collision.Tile;
 	import com.ddg.dep.Settings;
@@ -41,10 +42,17 @@ package com.ddg.dep.game.level
 					var tile:Tile = GetTile(x, y);
 					if (tile != null)
 					{
-						var image:Image = new Image(tileSheet.getTexture(tile.type.toString()));
-						image.x = x * Settings.TILE_WIDTH;
-						image.y = y * Settings.TILE_HEIGHT;
-						rt.draw(image);
+						if (tile.IsItem)
+						{
+							ItemManager.Instance.CreateItemFromTile(tile);
+						}
+						else
+						{
+							var image:Image = new Image(tileSheet.getTexture(tile.type.toString()));
+							image.x = x * Settings.TILE_WIDTH;
+							image.y = y * Settings.TILE_HEIGHT;
+							rt.draw(image);
+						}
 					}
 				}
 			}

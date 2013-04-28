@@ -6,6 +6,6 @@ package com.ddg.dep.game.actor.collisionfilter
 	public interface ICollisionFilter 
 	{
 		function IsBlocking(tileType:int):Boolean
-		function IsValidTrigger(tileType:int):Boolean
+		function IsItemBlocking(itemType:int):Boolean
 	}
 }

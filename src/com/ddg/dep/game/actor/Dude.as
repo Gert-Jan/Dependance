@@ -155,6 +155,7 @@ package com.ddg.dep.game.actor
 		private function UpdateLevelCollision():void
 		{
 			var tile:Tile = null;
+			var item:Item = null;
 			var point:Point = new Point();
 			var worldPoint:Point = new Point();
 			isBased = false;
@@ -169,6 +170,16 @@ package com.ddg.dep.game.actor
 					bounds.SetPosition(bounds.minX + tile.collision.maxX - worldPoint.x, bounds.minY);
 					velocity.x = Math.max(velocity.x, 0);
 				}
+				else
+				{
+					item = ItemManager.Instance.GetItemAtPoint(worldPoint);
+					if (item != null)
+					{
+						if (collisionFilter.IsItemBlocking(item.Type))
+							bounds.SetPosition(bounds.minX + item.Collision.maxX - worldPoint.x, bounds.minY);
+						item.Interact(this);
+					}
+				}
 			}
 			// right pushout
 			for each (point in collision.right)
@@ -179,6 +190,16 @@ package com.ddg.dep.game.actor
 				{
 					bounds.SetPosition(bounds.minX + tile.collision.minX - worldPoint.x, bounds.minY);
 					velocity.x = Math.min(velocity.x, 0);
+				}
+				else
+				{
+					item = ItemManager.Instance.GetItemAtPoint(worldPoint);
+					if (item != null && collisionFilter.IsItemBlocking(item.Type))
+					{
+						if (collisionFilter.IsItemBlocking(item.Type))
+							bounds.SetPosition(bounds.minX + item.Collision.minX - worldPoint.x, bounds.minY);
+						item.Interact(this);
+					}
 				}
 			}
 			// bottom pushout
@@ -192,6 +213,16 @@ package com.ddg.dep.game.actor
 					velocity.y = Math.min(velocity.y, 0);
 					isBased = true;
 				}
+				else
+				{
+					item = ItemManager.Instance.GetItemAtPoint(worldPoint);
+					if (item != null)
+					{
+						if (collisionFilter.IsItemBlocking(item.Type))
+							bounds.SetPosition(bounds.minX, bounds.minY + item.Collision.minY - worldPoint.y);
+						item.Interact(this);
+					}
+				}
 			}
 			// top pushout
 			for each (point in collision.top)
@@ -202,6 +233,16 @@ package com.ddg.dep.game.actor
 				{
 					bounds.SetPosition(bounds.minX, bounds.minY + tile.collision.maxY - worldPoint.y);
 					velocity.y = Math.max(velocity.y, 0);
+				}
+				else
+				{
+					item = ItemManager.Instance.GetItemAtPoint(worldPoint);
+					if (item != null)
+					{
+						if (collisionFilter.IsItemBlocking(item.Type))
+							bounds.SetPosition(bounds.minX, bounds.minY + item.Collision.maxY - worldPoint.y);
+						item.Interact(this);
+					}
 				}
 			}
 			
@@ -230,12 +271,13 @@ package com.ddg.dep.game.actor
 		
 		private function IterateBounch(direction:int = 1):void
 		{
-			Starling.juggler.tween(sprite, audioSet.NextBeatDeltaTime + 0.05, 
+			var nextTime:Number = audioSet.NextBeatDeltaTime;
+			if (nextTime < 0.02)
+				nextTime += audioSet.BeatInterval();
+			Starling.juggler.tween(sprite, nextTime, 
 			{
-				transition: Transitions.EASE_OUT,
-				onComplete: function():void { IterateBounch(sprite.scaleY == 1 ? direction : -direction); },
-				scaleY: sprite.scaleY < 1 ? 1 : 0.95,
-				skewX: sprite.scaleY == 1 ? 0 : 0.05 * direction
+				onComplete: function():void { IterateBounch(-direction); },
+				skewX: 0.1 * direction * (direction < 0 ? 1.1 : 1)
 			});
 		}
 		
@@ -244,7 +286,7 @@ package com.ddg.dep.game.actor
 			if (Math.abs(velocity.x) > 0 || Math.abs(velocity.y))
 				audioSet.FadeInLayer(AudioLibrary.ACTION_WALK, 0.2);
 			else
-				audioSet.FadeOutLayer(AudioLibrary.ACTION_WALK,1);
+				audioSet.FadeOutLayer(AudioLibrary.ACTION_WALK, 1);
 		}
 		
 		private function Draw():void

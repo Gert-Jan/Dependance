@@ -54,15 +54,20 @@ package com.ddg.dep.audio
 			}
 		}
 		
+		public function BeatInterval(beats:int = 1):Number
+		{
+			return beats / (bpm / 60);
+		}
+		
 		public function get NextSyncTiming():Number
 		{
-			var intervalTime:Number = syncInterval / (bpm / 60)
+			var intervalTime:Number = BeatInterval(syncInterval);
 			return AudioManager.Instance.Time + intervalTime - AudioManager.Instance.Time % intervalTime;
 		}
 		
 		public function get NextBeatDeltaTime():Number
 		{
-			var intervalTime:Number = 1 / (bpm / 60);
+			var intervalTime:Number = BeatInterval();
 			return intervalTime - AudioManager.Instance.Time % intervalTime;
 		}
 		

@@ -33,8 +33,8 @@ package com.ddg.dep.ui
 		private var phraseImage:Image;
 		private var phraseSprite:Sprite = new Sprite();
 		
-		private var delayTimer:DelayedCall = new DelayedCall(null, Number.MAX_VALUE);
-		private var showTimer:DelayedCall = new DelayedCall(null, Number.MAX_VALUE);
+		private var delayTimer:DelayedCall = new DelayedCall(Dummy, 0);
+		private var showTimer:DelayedCall = new DelayedCall(Dummy, 0);
 		
 		public function SpeechWidget()
 		{
@@ -83,8 +83,8 @@ package com.ddg.dep.ui
 		{
 			if (cancelTimers)
 			{
-				Starling.juggler.remove(delayTimer);
-				Starling.juggler.remove(showTimer);
+				ResetDelayedCall(delayTimer);
+				ResetDelayedCall(showTimer);
 			}
 			this.frame  = frame;
 			this.phrase = phrase;
@@ -95,10 +95,8 @@ package com.ddg.dep.ui
 		
 		public function ShowTimed(frame:int, phrase:int, delay:Number, time:Number, overwrite:Boolean = true):void
 		{
-			if (overwrite || (delayTimer.isComplete))
+			if (overwrite || (showTimer.isComplete))
 			{
-				Starling.juggler.remove(delayTimer);
-				Starling.juggler.remove(showTimer);
 				delayTimer.reset(Show, delay, [frame, phrase, false]);
 				showTimer.reset(Hide, delay + time);
 				Starling.juggler.add(delayTimer);
@@ -109,15 +107,24 @@ package com.ddg.dep.ui
 		public function Hide():void
 		{
 			surface.visible = false;
-			Starling.juggler.remove(delayTimer);
-			Starling.juggler.remove(showTimer);
+			ResetDelayedCall(delayTimer);
+			ResetDelayedCall(showTimer);
 		}
 		
 		public function DelayedHide(delay:Number):void
 		{
-			Starling.juggler.remove(delayTimer);
 			delayTimer.reset(Hide, delay);
 			Starling.juggler.add(delayTimer);
 		}
+		
+		private function ResetDelayedCall(call:DelayedCall):void
+		{
+			call.reset(Dummy, 0);
+			// complete it
+			call.advanceTime(1);
+		}
+		
+		private function Dummy():void
+		{}
 	}
 }

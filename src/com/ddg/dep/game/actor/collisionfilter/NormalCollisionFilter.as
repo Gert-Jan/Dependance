@@ -1,5 +1,6 @@
 package com.ddg.dep.game.actor.collisionfilter 
 {
+	import com.ddg.dep.game.actor.Item;
 	import com.ddg.dep.game.collision.Tile;
 	/**
 	 * @author Gert-Jan Stolk
@@ -13,14 +14,13 @@ package com.ddg.dep.game.actor.collisionfilter
 		
 		public function IsBlocking(tileType:int):Boolean 
 		{
-			if (tileType >= Tile.FULL_BLACK && tileType <= Tile.FULL_GREY)
-				return true;
-			return false;
+			return tileType >= Tile.FULL_BLACK && tileType <= Tile.FULL_GREY;
 		}
 		
-		public function IsValidTrigger(tileType:int):Boolean 
+		public function IsItemBlocking(itemType:int):Boolean
 		{
-			return false;
+			return itemType == Item.TYPE_DOOR || 
+				itemType == Item.TYPE_KEY_HOLE;
 		}
 	}
 }

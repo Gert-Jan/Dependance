@@ -1,6 +1,7 @@
 package com.ddg.dep.game.actor.behaviour 
 {
 	import com.ddg.dep.game.actor.Dude;
+	import com.ddg.dep.game.actor.DudeManager;
 	import com.ddg.dep.ui.SpeechWidget;
 	import com.ddg.dep.ui.UIManager;
 	import flash.geom.Point;
@@ -31,6 +32,7 @@ package com.ddg.dep.game.actor.behaviour
 		public function set Actor(value:Dude):void 
 		{
 			dude = value;
+			//defaultBehavior.Actor = value;
 		}
 		
 		public function Update(deltaTime:Number):void
@@ -54,7 +56,7 @@ package com.ddg.dep.game.actor.behaviour
 					case STEP_WALK_RIGHT:
 						if (!widget.IsVisible && dude.Position.y > LEVEL_OFFSET_Y + 200)
 						{
-							widget.ShowTimed(SpeechWidget.FRAME_THINK, SpeechWidget.PHRASE_TUTORIAL_RIGHT, 0.4, Number.MAX_VALUE, false);
+							widget.ShowTimed(SpeechWidget.FRAME_THINK, SpeechWidget.PHRASE_TUTORIAL_RIGHT, 0.3, Number.MAX_VALUE, false);
 						}
 						if (dude.Velocity.x > 0)
 						{
@@ -74,8 +76,13 @@ package com.ddg.dep.game.actor.behaviour
 						}
 						break;
 					case STEP_INTERACT:
+						if (widget.Phrase != SpeechWidget.PHRASE_TUTORIAL_DOWN && DudeManager.Instance.IsNonOwnedDudeNear(dude, 40))
+						{
+							widget.ShowTimed(SpeechWidget.FRAME_THINK, SpeechWidget.PHRASE_TUTORIAL_DOWN, 0, 2, true);
+						}
 						break;
 					case STEP_SWITCH:
+						//defaultBehavior.Update(deltaTime);
 						break;
 				}
 			}

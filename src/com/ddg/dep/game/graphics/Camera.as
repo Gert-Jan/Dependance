@@ -1,6 +1,7 @@
 package com.ddg.dep.game.graphics 
 {
 	import com.ddg.dep.game.actor.DudeManager;
+	import com.ddg.dep.game.actor.ItemManager;
 	import com.ddg.dep.game.level.Level;
 	import com.ddg.dep.game.level.LevelManager;
 	import com.ddg.dep.Settings;
@@ -104,6 +105,10 @@ package com.ddg.dep.game.graphics
 			var dudeSurface:Sprite = DudeManager.Instance.Surface;
 			dudeSurface.x = -nw.x;
 			dudeSurface.y = -nw.y;
+			// item surface
+			var itemSurface:Sprite = ItemManager.Instance.Surface;
+			itemSurface.x = -nw.x;
+			itemSurface.y = -nw.y;
 			// ui surface
 			var uiSurface:Sprite = UIManager.Instance.Surface;
 			uiSurface.x = -nw.x;

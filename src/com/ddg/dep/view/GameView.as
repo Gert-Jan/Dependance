@@ -3,6 +3,7 @@ package com.ddg.dep.view
 	import com.ddg.dep.Assets;
 	import com.ddg.dep.audio.AudioManager;
 	import com.ddg.dep.game.actor.DudeManager;
+	import com.ddg.dep.game.actor.ItemManager;
 	import com.ddg.dep.game.graphics.Camera;
 	import com.ddg.dep.game.level.LevelManager;
 	import com.ddg.dep.Keys;
@@ -29,12 +30,14 @@ package com.ddg.dep.view
 		private function Init():void
 		{
 			LevelManager.Instance.Init();
-			camera = Camera.Instance;			
+			camera = Camera.Instance;
 			UIManager.Instance.Init();
 			DudeManager.Instance.Init();
+			ItemManager.Instance.Init();
 			
 			surface.addChild(camera.Surface);
 			surface.addChild(DudeManager.Instance.Surface);
+			surface.addChild(ItemManager.Instance.Surface);
 			surface.addChild(UIManager.Instance.Surface);
 			
 			LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(0, 0);
@@ -68,6 +71,7 @@ package com.ddg.dep.view
 			AudioManager.Instance.Update(deltaTime);
 			camera.Update(deltaTime);
 			DudeManager.Instance.Update(deltaTime);
+			ItemManager.Instance.Update(deltaTime);
 		}
 		
 		public function get IsActive():Boolean

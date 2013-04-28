@@ -28,6 +28,12 @@ package com.ddg.dep.game.collision
 			maxY = y + height;
 		}
 		
+		public function ContainsPoint(point:Point):Boolean
+		{
+			return point.x > minX && point.x < maxX &&
+				point.y > minY && point.y < maxY;
+		}
+		
 		public function LocalToWorldPoint(point:Point):Point
 		{
 			return PointHelper.Add(new Point(minX, minY), point);
