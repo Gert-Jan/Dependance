@@ -27,6 +27,10 @@ package com.ddg.dep
 		private static const dudeNormal:Class;
 		[Embed(source = "../../../../art/DudeSmall.png")]
 		private static const dudeSmall:Class;
+		[Embed(source = "../../../../art/SpeechFrames.png")]
+		private static const speechFrames:Class;
+		[Embed(source = "../../../../art/SpeechPhrases.png")]
+		private static const speechPhrases:Class;
 		
 		[Embed(source = "../../../../art/audio/IdleNormal01.mp3")]
 		private static const audioIdleNormal01:Class;
@@ -51,7 +55,7 @@ package com.ddg.dep
 			return this[asset];
 		}
 		
-		private function CreateTileMap(asset:Class, tileWidth:int, tileHeight:int):TextureAtlas
+		private function CreateTileMap(asset:Class, tileWidth:int, tileHeight:int, offset:int = 0):TextureAtlas
 		{
 			if (this[asset] == null)
 			{
@@ -64,7 +68,7 @@ package com.ddg.dep
 					for (var x:int = 0; x < tileCountX; x++)
 					{
 						var rect:Rectangle = new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
-						atlas.addRegion((y * tileCountX + x + 1).toString(), rect);
+						atlas.addRegion((y * tileCountX + x + offset).toString(), rect);
 					}
 				}
 				this[asset] = atlas;
@@ -90,7 +94,9 @@ package com.ddg.dep
 		
 		public function get DudeNormal():Texture { return CreateTexture(dudeNormal); }
 		public function get DudeSmall():Texture { return CreateTexture(dudeSmall); }
-		public function get Tiles():TextureAtlas { return CreateTileMap(tiles, Settings.TILE_WIDTH, Settings.TILE_HEIGHT); }
+		public function get Tiles():TextureAtlas { return CreateTileMap(tiles, Settings.TILE_WIDTH, Settings.TILE_HEIGHT, 1); }
+		public function get SpeechFrames():TextureAtlas { return CreateTileMap(speechFrames, 48, 48); }
+		public function get SpeechPhrases():TextureAtlas { return CreateTileMap(speechPhrases, 32, 16); }
 		public function get Levels():Object { return CreateJSON(levels); }
 		public function get AudioIdleNormal01():AudioSample { return CreateAudioSample(audioIdleNormal01, 140, 8); }
 		public function get AudioIdleSmall01():AudioSample { return CreateAudioSample(audioIdleSmall01, 140, 8); }

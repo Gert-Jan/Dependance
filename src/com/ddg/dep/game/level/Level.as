@@ -6,6 +6,7 @@ package com.ddg.dep.game.level
 	import com.ddg.dep.Settings;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.textures.RenderTexture;
 	import starling.textures.TextureAtlas;
 	/**
 	 * @author Gert-Jan Stolk
@@ -32,6 +33,7 @@ package com.ddg.dep.game.level
 		
 		private function InitSprite():void
 		{
+			var rt:RenderTexture = new RenderTexture(Settings.Instance.StageWidth, Settings.Instance.StageHeight, true);
 			for (var y:int = 0; y < height; y++)
 			{
 				for (var x:int = 0; x < width; x++)
@@ -42,10 +44,11 @@ package com.ddg.dep.game.level
 						var image:Image = new Image(tileSheet.getTexture(tile.type.toString()));
 						image.x = x * Settings.TILE_WIDTH;
 						image.y = y * Settings.TILE_HEIGHT;
-						sprite.addChild(image);
+						rt.draw(image);
 					}
 				}
 			}
+			sprite.addChild(new Image(rt));
 			sprite.x = this.x;
 			sprite.y = this.y;
 		}

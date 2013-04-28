@@ -4,7 +4,9 @@ package com.ddg.dep.game.actor
 	import com.ddg.dep.audio.AudioLibrary;
 	import com.ddg.dep.game.actor.behaviour.DummyBehavior;
 	import com.ddg.dep.game.actor.behaviour.GravityBehavior;
+	import com.ddg.dep.game.actor.behaviour.IBehavior;
 	import com.ddg.dep.game.actor.behaviour.JumpBehavior;
+	import com.ddg.dep.game.actor.behaviour.SpeechTutorialBehavior;
 	import com.ddg.dep.game.actor.behaviour.WalkBehavior;
 	import com.ddg.dep.game.actor.collisionfilter.NormalCollisionFilter;
 	import com.ddg.dep.game.collision.AABB;
@@ -46,14 +48,17 @@ package com.ddg.dep.game.actor
 			var dude:Dude;
 			// normal dude
 			dude = new Dude(
-				new GravityBehavior(), 
+				Vector.<IBehavior>([
+					new GravityBehavior(), 
+					new SpeechTutorialBehavior()
+				]),
 				new JumpBehavior(), 
 				new DummyBehavior(),
-				new WalkBehavior( -150, -75),
-				new WalkBehavior(150, 90),
-				new AABB(100, 100, Settings.TILE_WIDTH, Settings.TILE_HEIGHT * 2), 
+				new WalkBehavior( -150, -115),
+				new WalkBehavior(150, 115),
+				new AABB(368, 128, Settings.TILE_WIDTH, Settings.TILE_HEIGHT * 2), 
 				new PointShape(
-					Vector.<Point>([new Point(Settings.TILE_WIDTH / 2, Settings.TILE_HEIGHT * 2)]),
+					Vector.<Point>([new Point(Settings.TILE_WIDTH / 4, Settings.TILE_HEIGHT * 2), new Point(Settings.TILE_WIDTH / 4 * 3, Settings.TILE_HEIGHT * 2)]),
 					Vector.<Point>([new Point(Settings.TILE_WIDTH / 2, 0)]),
 					Vector.<Point>([new Point(0, Settings.TILE_HEIGHT / 2), new Point(0, Settings.TILE_HEIGHT + Settings.TILE_HEIGHT / 2)]),
 					Vector.<Point>([new Point(Settings.TILE_WIDTH, Settings.TILE_HEIGHT / 2), new Point(Settings.TILE_WIDTH, Settings.TILE_HEIGHT + Settings.TILE_HEIGHT / 2)])
@@ -68,12 +73,14 @@ package com.ddg.dep.game.actor
 			
 			// small dude
 			dude = new Dude(
-				new GravityBehavior(), 
+				Vector.<IBehavior>([
+					new GravityBehavior()
+				]), 
 				new JumpBehavior(0.3, 22), 
 				new DummyBehavior(),
 				new WalkBehavior( -150, -75),
 				new WalkBehavior(150, 90),
-				new AABB(20, 100, Settings.TILE_WIDTH, Settings.TILE_HEIGHT), 
+				new AABB(1200, 200, Settings.TILE_WIDTH, Settings.TILE_HEIGHT), 
 				new PointShape(
 					Vector.<Point>([new Point(Settings.TILE_WIDTH / 2, Settings.TILE_HEIGHT)]),
 					Vector.<Point>([new Point(Settings.TILE_WIDTH / 2, 0)]),

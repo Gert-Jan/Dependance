@@ -7,6 +7,7 @@ package com.ddg.dep.view
 	import com.ddg.dep.game.level.LevelManager;
 	import com.ddg.dep.Keys;
 	import com.ddg.dep.Settings;
+	import com.ddg.dep.ui.UIManager;
 	import flash.geom.Point;
 	import starling.display.Sprite;
 	import starling.events.KeyboardEvent;
@@ -28,11 +29,13 @@ package com.ddg.dep.view
 		private function Init():void
 		{
 			LevelManager.Instance.Init();
-			camera = Camera.Instance;
-			surface.addChild(camera.Surface);
-			
+			camera = Camera.Instance;			
+			UIManager.Instance.Init();
 			DudeManager.Instance.Init();
+			
+			surface.addChild(camera.Surface);
 			surface.addChild(DudeManager.Instance.Surface);
+			surface.addChild(UIManager.Instance.Surface);
 			
 			LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(0, 0);
 		}

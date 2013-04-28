@@ -13,7 +13,7 @@ package com.ddg.dep.game.actor.behaviour
 		private var maxJumpTime:Number;
 		private var jumpPower:Number;
 		
-		public function JumpBehavior(maxJumpTime:Number = 0.3, jumpPower:Number = 30) 
+		public function JumpBehavior(maxJumpTime:Number = 0.3, jumpPower:Number = 33) 
 		{
 			this.maxJumpTime = maxJumpTime;
 			this.jumpPower = jumpPower;

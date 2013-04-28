@@ -4,6 +4,7 @@ package com.ddg.dep.game.graphics
 	import com.ddg.dep.game.level.Level;
 	import com.ddg.dep.game.level.LevelManager;
 	import com.ddg.dep.Settings;
+	import com.ddg.dep.ui.UIManager;
 	import flash.geom.Point;
 	import starling.display.Sprite;
 	/**
@@ -20,7 +21,7 @@ package com.ddg.dep.game.graphics
 		
 		public function Camera() 
 		{
-			UpdateSurface();
+			UpdateSurfaces();
 		}
 		
 		private var position:Point = new Point();
@@ -35,7 +36,7 @@ package com.ddg.dep.game.graphics
 			{
 				position.x = x;
 				position.y = y;
-				UpdateSurface();
+				UpdateSurfaces();
 			}
 			position.x = x;
 			position.y = y;
@@ -80,8 +81,9 @@ package com.ddg.dep.game.graphics
 			targetMovement.y = (y - position.y) / time;
 		}
 		
-		private function UpdateSurface():void
+		private function UpdateSurfaces():void
 		{
+			// level surface
 			surface.removeChildren();
 			var nw:Point = ViewToWorld(new Point(0, 0));
 			var se:Point = ViewToWorld(new Point(Settings.Instance.StageWidth, Settings.Instance.StageHeight));
@@ -98,9 +100,14 @@ package com.ddg.dep.game.graphics
 			}
 			surface.x = -nw.x;
 			surface.y = -nw.y;
+			// dude surface
 			var dudeSurface:Sprite = DudeManager.Instance.Surface;
 			dudeSurface.x = -nw.x;
 			dudeSurface.y = -nw.y;
+			// ui surface
+			var uiSurface:Sprite = UIManager.Instance.Surface;
+			uiSurface.x = -nw.x;
+			uiSurface.y = -nw.y;
 		}
 		
 		public function Update(deltaTime:Number):void

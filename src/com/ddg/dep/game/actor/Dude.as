@@ -38,7 +38,7 @@ package com.ddg.dep.game.actor
 		private var deltaTime:Number;
 		
 		// behaviours
-		private var gravityBehavior:IBehavior;
+		private var updateBehaviors:Vector.<IBehavior>;
 		private var upBehavior:IBehavior;
 		private var leftBehavior:IBehavior;
 		private var rightBehavior:IBehavior;
@@ -50,12 +50,13 @@ package com.ddg.dep.game.actor
 		// audio
 		private var audioSet:AudioSet;
 		
-		public function Dude(
-			gravityBehavior:IBehavior, upBehavior:IBehavior, downBehavior:IBehavior, leftBehavior:IBehavior, rightBehavior:IBehavior, 
+		public function Dude(updateBehaviors:Vector.<IBehavior>, 
+			upBehavior:IBehavior, downBehavior:IBehavior, leftBehavior:IBehavior, rightBehavior:IBehavior, 
 			bounds:AABB, collision:PointShape, collisionFilter:ICollisionFilter, image:Image, audioSet:AudioSet) 
 		{
-			this.gravityBehavior = gravityBehavior;
-			this.gravityBehavior.Actor = this;
+			this.updateBehaviors = updateBehaviors;
+			for each (var behaviour:IBehavior in updateBehaviors)
+				behaviour.Actor = this;
 			this.upBehavior = upBehavior;
 			this.upBehavior.Actor = this;
 			this.downBehavior = downBehavior;
@@ -68,8 +69,6 @@ package com.ddg.dep.game.actor
 			this.bounds = bounds;
 			this.collision = collision;
 			this.collisionFilter = collisionFilter;
-			trace(DudeManager.Instance);
-			trace(DudeManager.Instance.Surface);
 			
 			sprite.addChild(image);
 			sprite.pivotY = bounds.height;
@@ -122,6 +121,7 @@ package com.ddg.dep.game.actor
 				audioSet.PlayLayer(AudioLibrary.ACTION_WALK);
 				audioSet.SetLayerVolume(AudioLibrary.ACTION_WALK, 0);
 				IterateBounch();
+				UpdateLevel();
 			}
 			return isActive;
 		}
@@ -139,7 +139,8 @@ package com.ddg.dep.game.actor
 		
 		private function UpdateBehaviors(deltaTime:Number):void
 		{
-			gravityBehavior.Update(deltaTime);
+			for each (var behavior:IBehavior in updateBehaviors)
+				behavior.Update(deltaTime);
 			upBehavior.Update(deltaTime);
 			downBehavior.Update(deltaTime);
 			leftBehavior.Update(deltaTime);
@@ -158,6 +159,28 @@ package com.ddg.dep.game.actor
 			var worldPoint:Point = new Point();
 			isBased = false;
 			
+			// left pushout
+			for each (point in collision.left)
+			{
+				worldPoint = bounds.LocalToWorldPoint(point);
+				tile = LevelManager.Instance.GetTileOnPoint(worldPoint);
+				if (tile != null && collisionFilter.IsBlocking(tile.type))
+				{
+					bounds.SetPosition(bounds.minX + tile.collision.maxX - worldPoint.x, bounds.minY);
+					velocity.x = Math.max(velocity.x, 0);
+				}
+			}
+			// right pushout
+			for each (point in collision.right)
+			{
+				worldPoint = bounds.LocalToWorldPoint(point);
+				tile = LevelManager.Instance.GetTileOnPoint(worldPoint);
+				if (tile != null && collisionFilter.IsBlocking(tile.type))
+				{
+					bounds.SetPosition(bounds.minX + tile.collision.minX - worldPoint.x, bounds.minY);
+					velocity.x = Math.min(velocity.x, 0);
+				}
+			}
 			// bottom pushout
 			for each (point in collision.bottom)
 			{
@@ -181,28 +204,7 @@ package com.ddg.dep.game.actor
 					velocity.y = Math.max(velocity.y, 0);
 				}
 			}
-			// left pushout
-			for each (point in collision.left)
-			{
-				worldPoint = bounds.LocalToWorldPoint(point);
-				tile = LevelManager.Instance.GetTileOnPoint(worldPoint);
-				if (tile != null && collisionFilter.IsBlocking(tile.type))
-				{
-					bounds.SetPosition(bounds.minX + tile.collision.maxX - worldPoint.x, bounds.minY);
-					velocity.x = Math.max(velocity.x, 0);
-				}
-			}
-			// right pushout
-			for each (point in collision.right)
-			{
-				worldPoint = bounds.LocalToWorldPoint(point);
-				tile = LevelManager.Instance.GetTileOnPoint(worldPoint);
-				if (tile != null && collisionFilter.IsBlocking(tile.type))
-				{
-					bounds.SetPosition(bounds.minX + tile.collision.minX - worldPoint.x, bounds.minY);
-					velocity.x = Math.min(velocity.x, 0);
-				}
-			}
+			
 		}
 		
 		private function UpdateLevelChange():void
@@ -216,6 +218,14 @@ package com.ddg.dep.game.actor
 				LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(level.XIndex, level.YIndex + 1);
 			else if (velocity.y < 0 && bounds.minY < level.Y)
 				LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(level.XIndex, level.YIndex - 1);
+		}
+		
+		private function UpdateLevel():void
+		{
+			var point:Point = bounds.LocalToWorldPoint(collision.top[0]);
+			LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(
+				Math.floor(point.x / Settings.Instance.StageWidth), 
+				Math.floor(point.y / Settings.Instance.StageHeight));
 		}
 		
 		private function IterateBounch(direction:int = 1):void
@@ -234,7 +244,7 @@ package com.ddg.dep.game.actor
 			if (Math.abs(velocity.x) > 0 || Math.abs(velocity.y))
 				audioSet.FadeInLayer(AudioLibrary.ACTION_WALK, 0.2);
 			else
-				audioSet.FadeOutLayer(AudioLibrary.ACTION_WALK,0.01);
+				audioSet.FadeOutLayer(AudioLibrary.ACTION_WALK,1);
 		}
 		
 		private function Draw():void
