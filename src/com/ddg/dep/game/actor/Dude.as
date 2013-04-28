@@ -118,6 +118,10 @@ package com.ddg.dep.game.actor
 		
 		public function set Inventory(value:Item):void
 		{
+			if (value == null)
+				audioSet.StopLayer(AudioLibrary.ACTION_INVENTORY);
+			else
+				audioSet.PlayLayer(AudioLibrary.ACTION_INVENTORY);
 			inventory = value;
 		}
 		
@@ -314,9 +318,9 @@ package com.ddg.dep.game.actor
 		private function UpdateAudio():void
 		{
 			if (Math.abs(velocity.x) > 0 || Math.abs(velocity.y))
-				audioSet.FadeInLayer(AudioLibrary.ACTION_WALK, 0.2);
+				audioSet.FadeInLayer(AudioLibrary.ACTION_WALK, 0.1);
 			else
-				audioSet.FadeOutLayer(AudioLibrary.ACTION_WALK, 1);
+				audioSet.FadeOutLayer(AudioLibrary.ACTION_WALK, 0.1);
 		}
 		
 		private function Draw():void

@@ -40,6 +40,10 @@ package com.ddg.dep
 		private static const audioWalkNormal01:Class;
 		[Embed(source = "../../../../art/audio/WalkSmall01.mp3")]
 		private static const audioWalkSmall01:Class;
+		[Embed(source = "../../../../art/audio/InventoryNormal01.mp3")]
+		private static const audioInventoryNormal01:Class;
+		[Embed(source = "../../../../art/audio/InventorySmall01.mp3")]
+		private static const audioInventorySmall01:Class;
 		
 		[Embed(source = "../../../../art/Levels.json", mimeType="application/octet-stream")]
 		private static const levels:Class;
@@ -102,5 +106,7 @@ package com.ddg.dep
 		public function get AudioIdleSmall01():AudioSample { return CreateAudioSample(audioIdleSmall01, 140, 8); }
 		public function get AudioWalkNormal01():AudioSample { return CreateAudioSample(audioWalkNormal01, 140, 8); }
 		public function get AudioWalkSmall01():AudioSample { return CreateAudioSample(audioWalkSmall01, 140, 8); }
+		public function get AudioInventoryNormal01():AudioSample { return CreateAudioSample(audioInventoryNormal01, 140, 8); }
+		public function get AudioInventorySmall01():AudioSample { return CreateAudioSample(audioInventorySmall01, 140, 8); }
 	}
 }

@@ -18,6 +18,7 @@ package com.ddg.dep.audio
 		
 		public static const ACTION_IDLE:String = "idle";
 		public static const ACTION_WALK:String = "walk";
+		public static const ACTION_INVENTORY:String = "Inventory";
 		
 		public function get AudioSetNormalDude():AudioSet
 		{
@@ -25,12 +26,19 @@ package com.ddg.dep.audio
 			{
 				var audioSet:AudioSet = new AudioSet(140, 4);
 				var layer:AudioLayer;
+				
 				layer = new AudioLayer();
 				layer.AddCue(new AudioCue(Assets.Instance.AudioIdleNormal01, 1));
 				audioSet.AddLayer(ACTION_IDLE, layer);
+				
 				layer = new AudioLayer();
 				layer.AddCue(new AudioCue(Assets.Instance.AudioWalkNormal01, 1));
 				audioSet.AddLayer(ACTION_WALK, layer);
+				
+				layer = new AudioLayer();
+				layer.AddCue(new AudioCue(Assets.Instance.AudioInventoryNormal01, 1));
+				audioSet.AddLayer(ACTION_INVENTORY, layer);
+				
 				AudioManager.Instance.AddSet(audioSet);
 				this["NormalDude"] = audioSet;
 			}
@@ -44,11 +52,18 @@ package com.ddg.dep.audio
 				var audioSet:AudioSet = new AudioSet(140, 4);
 				var layer:AudioLayer;
 				layer = new AudioLayer();
+				
 				layer.AddCue(new AudioCue(Assets.Instance.AudioIdleSmall01, 1));
 				audioSet.AddLayer(ACTION_IDLE, layer);
 				layer = new AudioLayer();
+				
 				layer.AddCue(new AudioCue(Assets.Instance.AudioWalkSmall01, 1));
 				audioSet.AddLayer(ACTION_WALK, layer);
+				
+				layer = new AudioLayer();
+				layer.AddCue(new AudioCue(Assets.Instance.AudioInventorySmall01, 1));
+				audioSet.AddLayer(ACTION_INVENTORY, layer);
+				
 				AudioManager.Instance.AddSet(audioSet);
 				this["SmallDude"] = audioSet;
 			}
