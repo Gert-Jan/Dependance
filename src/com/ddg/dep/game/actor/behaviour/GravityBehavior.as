@@ -1,13 +1,14 @@
 package com.ddg.dep.game.actor.behaviour 
 {
 	import com.ddg.dep.game.actor.Dude;
+	import com.ddg.dep.game.actor.IActor;
 	import flash.geom.Point;
 	/**
 	 * @author Gert-Jan Stolk
 	 */
 	public class GravityBehavior implements IBehavior 
 	{
-		private var dude:Dude;
+		private var actor:IActor;
 		private var gravity:Number;
 		private var terminalVelocity:Number;
 		
@@ -17,16 +18,16 @@ package com.ddg.dep.game.actor.behaviour
 			this.terminalVelocity = terminalVelocity;
 		}
 		
-		public function set Actor(value:Dude):void 
+		public function set Actor(value:IActor):void 
 		{
-			dude = value;
+			actor = value;
 		}
 		
 		public function Update(deltaTime:Number):void
 		{
-			var vel:Point = dude.Velocity;
+			var vel:Point = actor.Velocity;
 			vel.y = Math.min(terminalVelocity, vel.y + gravity * deltaTime);
-			dude.Velocity = vel;
+			actor.Velocity = vel;
 		}
 		
 		public function OnActionStarted():void 

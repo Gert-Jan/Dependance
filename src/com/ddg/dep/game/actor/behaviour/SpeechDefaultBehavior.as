@@ -2,6 +2,7 @@ package com.ddg.dep.game.actor.behaviour
 {
 	import com.ddg.dep.game.actor.Dude;
 	import com.ddg.dep.game.actor.DudeManager;
+	import com.ddg.dep.game.actor.IActor;
 	import com.ddg.dep.ui.SpeechWidget;
 	import com.ddg.dep.ui.UIManager;
 	import flash.geom.Point;
@@ -20,9 +21,9 @@ package com.ddg.dep.game.actor.behaviour
 			UIManager.Instance.AddWidget(widget);
 		}
 		
-		public function set Actor(value:Dude):void 
+		public function set Actor(value:IActor):void 
 		{
-			dude = value;
+			dude = Dude(value);
 		}
 		
 		public function Update(deltaTime:Number):void

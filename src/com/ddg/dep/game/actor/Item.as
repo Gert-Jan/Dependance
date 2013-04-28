@@ -1,6 +1,10 @@
 package com.ddg.dep.game.actor 
 {
 	import com.ddg.dep.Assets;
+	import com.ddg.dep.game.actor.behaviour.interaction.AddToInventoryBehavior;
+	import com.ddg.dep.game.actor.behaviour.interaction.DoorBehavior;
+	import com.ddg.dep.game.actor.behaviour.interaction.DummyInteractionBehavior;
+	import com.ddg.dep.game.actor.behaviour.interaction.IInteractionBehavior;
 	import com.ddg.dep.game.collision.AABB;
 	import com.ddg.dep.game.collision.Tile;
 	import flash.geom.Point;
@@ -9,7 +13,7 @@ package com.ddg.dep.game.actor
 	/**
 	 * @author Gert-Jan Stolk
 	 */
-	public class Item
+	public class Item implements IActor
 	{
 		public static const TYPE_KEY:int = 0;
 		public static const TYPE_KEY_HOLE:int = 1;
@@ -22,13 +26,19 @@ package com.ddg.dep.game.actor
 		// collision
 		private var bounds:AABB;
 		
+		// behaviors
+		private var interactBehavior:IInteractionBehavior;
+		
 		// grapics
 		private var sprite:Sprite = new Sprite();
 		
-		public function Item(type:int, bounds:AABB, image:Image) 
+		public function Item(type:int, bounds:AABB, image:Image, interactBehavior:IInteractionBehavior) 
 		{
 			this.type = type;
 			this.bounds = bounds;
+			
+			interactBehavior.Actor = this;
+			this.interactBehavior = interactBehavior;
 			
 			sprite.addChild(image);
 			sprite.pivotY = bounds.height;
@@ -42,13 +52,28 @@ package com.ddg.dep.game.actor
 			switch(tile.type)
 			{
 				case Tile.ITEM_KEY:
-					item = new Item(TYPE_KEY, tile.collision, new Image(Assets.Instance.Tiles.getTexture(String(tile.type))));
+					item = new Item(
+						TYPE_KEY, 
+						tile.collision, 
+						new Image(Assets.Instance.Tiles.getTexture(String(tile.type))), 
+						new AddToInventoryBehavior()
+					);
 					break;
 				case Tile.ITEM_KEY_HOLE:
-					item = new Item(TYPE_KEY_HOLE, tile.collision, new Image(Assets.Instance.Tiles.getTexture(String(tile.type))));
+					item = new Item(
+						TYPE_KEY_HOLE, 
+						tile.collision, 
+						new Image(Assets.Instance.Tiles.getTexture(String(tile.type))),
+						new DoorBehavior()
+					);
 					break;
 				case Tile.ITEM_DOOR:
-					item = new Item(TYPE_DOOR, tile.collision, new Image(Assets.Instance.Tiles.getTexture(String(tile.type))));
+					item = new Item(
+						TYPE_DOOR, 
+						tile.collision, 
+						new Image(Assets.Instance.Tiles.getTexture(String(tile.type))),
+						new DoorBehavior()
+					);
 					break;
 			}
 			if (item != null)
@@ -71,6 +96,14 @@ package com.ddg.dep.game.actor
 			return new Point(bounds.minX, bounds.minY);
 		}
 		
+		public function set Velocity(value:Point):void
+		{ }
+		
+		public function get Velocity():Point
+		{
+			return new Point();
+		}
+		
 		public function get Collision():AABB
 		{
 			return bounds;
@@ -81,14 +114,14 @@ package com.ddg.dep.game.actor
 			return bounds.ContainsPoint(worldPoint);
 		}
 		
-		public function Interact(instigator:Dude):void
+		public function Interact(instigator:IActor):void
 		{
-			
+			interactBehavior.Interact(instigator);
 		}
 		
 		public function Destroy():void
 		{
-			
+			ItemManager.Instance.Surface.removeChild(sprite);
 		}
 		
 		public function Update(deltaTime:Number):void

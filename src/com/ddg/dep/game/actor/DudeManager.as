@@ -58,7 +58,7 @@ package com.ddg.dep.game.actor
 				new DummyBehavior(),
 				new WalkBehavior( -150, -75),
 				new WalkBehavior(150, 90),
-				new AABB(1200, 200, Settings.TILE_WIDTH, Settings.TILE_HEIGHT), 
+				new AABB(1044, 250, Settings.TILE_WIDTH, Settings.TILE_HEIGHT), 
 				new PointShape(
 					Vector.<Point>([new Point(Settings.TILE_WIDTH / 2, Settings.TILE_HEIGHT)]),
 					Vector.<Point>([new Point(Settings.TILE_WIDTH / 2, 0)]),
@@ -70,6 +70,7 @@ package com.ddg.dep.game.actor
 				AudioLibrary.Instance.AudioSetSmallDude
 			);
 			allDudes.push(dude);
+			ownedDudes.push(dude);
 			
 			// normal dude
 			dude = new Dude(

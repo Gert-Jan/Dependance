@@ -1,6 +1,7 @@
 package com.ddg.dep.game.actor.behaviour 
 {
 	import com.ddg.dep.game.actor.Dude;
+	import com.ddg.dep.game.actor.IActor;
 	import flash.geom.Point;
 	/**
 	 * @author Gert-Jan Stolk
@@ -18,9 +19,9 @@ package com.ddg.dep.game.actor.behaviour
 			this.airSpeed = airSpeed;
 		}
 		
-		public function set Actor(value:Dude):void 
+		public function set Actor(value:IActor):void 
 		{
-			this.dude = value;
+			this.dude = Dude(value);
 		}
 		
 		public function Update(deltaTime:Number):void

@@ -22,7 +22,7 @@ package com.ddg.dep.game.actor
 	/**
 	 * @author Gert-Jan Stolk
 	 */
-	public class Dude 
+	public class Dude implements IActor
 	{
 		// properties
 		private var velocity:Point = new Point();
@@ -33,6 +33,9 @@ package com.ddg.dep.game.actor
 		private var bounds:AABB;
 		private var collision:PointShape;
 		private var collisionFilter:ICollisionFilter;
+		
+		// inventory
+		private var inventory:Item;
 		
 		// temp vars
 		private var deltaTime:Number;
@@ -98,9 +101,24 @@ package com.ddg.dep.game.actor
 			return this.velocity;
 		}
 		
+		public function get Collision():AABB
+		{
+			return bounds;
+		}
+		
 		public function get IsBased():Boolean
 		{
 			return isBased;
+		}
+		
+		public function get Inventory():Item
+		{
+			return inventory;
+		}
+		
+		public function set Inventory(value:Item):void
+		{
+			inventory = value;
 		}
 		
 		public function ToggleActive():Boolean
@@ -126,6 +144,9 @@ package com.ddg.dep.game.actor
 			return isActive;
 		}
 		
+		public function Interact(instigator:IActor):void
+		{}
+		
 		public function Update(deltaTime:Number):void
 		{
 			this.deltaTime = deltaTime;
@@ -133,6 +154,7 @@ package com.ddg.dep.game.actor
 			UpdateMovement();
 			UpdateLevelCollision();
 			UpdateLevelChange();
+			UpdateInventory();
 			UpdateAudio();
 			Draw();
 		}
@@ -267,6 +289,14 @@ package com.ddg.dep.game.actor
 			LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(
 				Math.floor(point.x / Settings.Instance.StageWidth), 
 				Math.floor(point.y / Settings.Instance.StageHeight));
+		}
+		
+		private function UpdateInventory():void
+		{
+			if (inventory != null)
+			{
+				inventory.Position = Position.clone().add(new Point((sprite.width - inventory.Collision.width) / 2, (sprite.height - inventory.Collision.height) / 2));
+			}
 		}
 		
 		private function IterateBounch(direction:int = 1):void
