@@ -13,6 +13,8 @@ package com.ddg.dep.game.actor
 	import com.ddg.dep.Settings;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import starling.animation.Transitions;
+	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.KeyboardEvent;
@@ -70,6 +72,8 @@ package com.ddg.dep.game.actor
 			trace(DudeManager.Instance.Surface);
 			
 			sprite.addChild(image);
+			sprite.pivotY = bounds.height;
+			sprite.pivotX = bounds.width / 2;
 			DudeManager.Instance.Surface.addChild(sprite);
 			
 			this.audioSet = audioSet;
@@ -110,12 +114,14 @@ package com.ddg.dep.game.actor
 				leftBehavior.OnActionStopped();
 				rightBehavior.OnActionStopped();
 				audioSet.StopAll();
+				Starling.juggler.removeTweens(sprite);
 			}
 			else
 			{
 				audioSet.PlayLayer(AudioLibrary.ACTION_IDLE);
 				audioSet.PlayLayer(AudioLibrary.ACTION_WALK);
 				audioSet.SetLayerVolume(AudioLibrary.ACTION_WALK, 0);
+				IterateBounch();
 			}
 			return isActive;
 		}
@@ -127,7 +133,6 @@ package com.ddg.dep.game.actor
 			UpdateMovement();
 			UpdateLevelCollision();
 			UpdateLevelChange();
-			UpdateBounch(deltaTime);
 			UpdateAudio();
 			Draw();
 		}
@@ -213,13 +218,15 @@ package com.ddg.dep.game.actor
 				LevelManager.Instance.CurrentLevel = LevelManager.Instance.GetLevel(level.XIndex, level.YIndex - 1);
 		}
 		
-		private function UpdateBounch(deltaTime:Number):void
+		private function IterateBounch(direction:int = 1):void
 		{
-			//var m:Matrix = new Matrix();
-			//MatrixUtil.prependTranslation(m, sprite.x, sprite.y);
-			//MatrixUtil.prependSkew(m, 0.05, 0);
-			
-			//sprite.transformationMatrix = m;
+			Starling.juggler.tween(sprite, audioSet.NextBeatDeltaTime + 0.05, 
+			{
+				transition: Transitions.EASE_OUT,
+				onComplete: function():void { IterateBounch(sprite.scaleY == 1 ? direction : -direction); },
+				scaleY: sprite.scaleY < 1 ? 1 : 0.95,
+				skewX: sprite.scaleY == 1 ? 0 : 0.05 * direction
+			});
 		}
 		
 		private function UpdateAudio():void
@@ -232,8 +239,8 @@ package com.ddg.dep.game.actor
 		
 		private function Draw():void
 		{
-			sprite.x = bounds.minX + (sprite.width - bounds.width) / 2;
-			sprite.y = bounds.minY;
+			sprite.x = bounds.minX + (sprite.width - bounds.width) / 2 + sprite.pivotX;
+			sprite.y = bounds.minY + sprite.pivotY;
 		}
 		
 		public function OnKeyDown(event:KeyboardEvent):void

@@ -73,7 +73,6 @@ package com.ddg.dep.audio
 		
 		public function set Volume(volume:Number):void
 		{
-			trace(volume, channel);
 			this.volume = volume;
 			if (channel != null)
 				channel.soundTransform = new SoundTransform(volume, 0);

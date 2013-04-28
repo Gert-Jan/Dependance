@@ -60,6 +60,12 @@ package com.ddg.dep.audio
 			return AudioManager.Instance.Time + intervalTime - AudioManager.Instance.Time % intervalTime;
 		}
 		
+		public function get NextBeatDeltaTime():Number
+		{
+			var intervalTime:Number = 1 / (bpm / 60);
+			return intervalTime - AudioManager.Instance.Time % intervalTime;
+		}
+		
 		public function Update(deltaTime:Number):void
 		{
 			for each (var layer:AudioLayer in layers)
