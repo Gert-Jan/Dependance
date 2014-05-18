@@ -1,4 +1,4 @@
 Dependance
 ================
 
-Lundum Dare 26 entry
+Ludum Dare 26 entry
